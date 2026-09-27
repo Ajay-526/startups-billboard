@@ -18,12 +18,24 @@ model User {
   id String @id @default(cuid())
   email String @unique
   name String?
+  passwordHash String?
   role UserRole @default(USER)
   companies CompanyUser[]
   campaigns Campaign[] @relation("CampaignOwner")
   events Event[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  sessions Session[]
+}
+
+model Session {
+  id String @id @default(cuid())
+  tokenHash String @unique
+  userId String
+  expiresAt DateTime
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  @@index([userId, expiresAt])
 }
 
 model Company {
