@@ -42,6 +42,7 @@ export async function POST(request: Request) {
 
   const parsed = eventSchema.safeParse(body);
   if (!parsed.success) return NextResponse.json({ error: "Invalid event payload." }, { status: 400 });
+  if (parsed.data.properties && JSON.stringify(parsed.data.properties).length > 4096) return NextResponse.json({ error: "Event properties are too large." }, { status: 413 });
 
   try {
     const user = await getCurrentUser();
