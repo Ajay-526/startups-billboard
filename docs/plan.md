@@ -29,7 +29,7 @@
 - [x] company registration API
 - [x] spot selection/availability API
 - [x] campaign dates + server-side pricing
-- [ ] creative upload
+- [x] creative upload
 - [ ] exact preview
 
 ## Phase 4 — Payments + activation
@@ -37,12 +37,12 @@
 - [x] signed webhooks
 - [x] webhook idempotency foundation
 - [x] payment verification callback
-- [ ] approval
-- [ ] scheduling
-- [ ] expiry
+- [x] approval
+- [x] scheduling
+- [x] expiry
 
 ## Phase 5 — Admin
-- [ ] approval queue
+- [x] approval queue
 - [ ] inventory calendar
 - [ ] campaign controls
 - [ ] reports
