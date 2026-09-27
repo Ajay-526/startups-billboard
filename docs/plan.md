@@ -36,7 +36,7 @@
 - [x] Razorpay provider adapter
 - [x] signed webhooks
 - [x] webhook idempotency foundation
-- [ ] payment verification callback
+- [x] payment verification callback
 - [ ] approval
 - [ ] scheduling
 - [ ] expiry
