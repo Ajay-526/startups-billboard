@@ -68,16 +68,17 @@ export function HeroBillboard({ billboard }: { billboard: Billboard }) {
           <span className="rounded-full border border-white/10 bg-black/20 px-3 py-2 text-[10px] uppercase tracking-[.14em] text-white/55">Ends in 18 days</span>
         </div>
         <div className="max-w-5xl">
-          <div className="mb-6 flex items-center gap-3">
+          <div className="mb-6 flex flex-wrap items-center gap-3">
             <span className="grid size-12 place-items-center rounded-2xl border border-white/15 bg-white/[.08] text-sm font-black">{billboard.logo}</span>
             <span className="text-sm font-semibold">{billboard.company}</span>
+            <span className="rounded-full border border-[var(--signal)]/35 bg-[var(--signal)]/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[.14em] text-[var(--signal)]">#1 spot · ₹{billboard.price.toLocaleString("en-IN")}</span>
           </div>
           <h1 className="max-w-[11ch] text-[clamp(3.8rem,9vw,9rem)] font-black leading-[.79] tracking-[-.075em]">{billboard.headline}</h1>
           <p className="mt-7 max-w-[48ch] text-sm leading-6 text-white/58 sm:text-base">{billboard.subheadline}</p>
           <Link href={billboard.href} className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[.07] px-5 py-3 text-sm font-semibold backdrop-blur hover:bg-white/[.12]">See {billboard.company}<ArrowUpRight size={15}/></Link>
         </div>
         <div className="flex flex-col gap-4 border-t border-white/10 pt-5 sm:flex-row sm:items-end sm:justify-between">
-          <p className="max-w-md text-xs leading-5 text-white/42">The #1 position is scarce by design. One active owner. One campaign window. One very visible spot.</p>
+          <p className="max-w-md text-xs leading-5 text-white/42">The #1 position is scarce by design. One active owner. One campaign window. One very visible spot.</p><div className="text-right"><p className="eyebrow text-white/35">GRAB #1</p><p className="mt-1 text-lg font-black tracking-tight">₹{billboard.price.toLocaleString("en-IN")}</p></div>
           <span className="eyebrow text-white/35">THE BILLBOARD / 001</span>
         </div>
       </div>
