@@ -5,7 +5,9 @@ import { CookieConsent } from "@/components/cookie-consent";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://thestartupbillboard.com"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://thestartupbillboard.com",
+  ),
   title: {
     default: "The Startup Billboard — Own the Spot",
     template: "%s — The Startup Billboard",
@@ -16,7 +18,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   openGraph: {
     title: "The Startup Billboard — Own the Spot",
-    description: "Scarce digital billboard space for ambitious startups and brands.",
+    description:
+      "Scarce digital billboard space for ambitious startups and brands.",
     type: "website",
     siteName: "The Startup Billboard",
   },
