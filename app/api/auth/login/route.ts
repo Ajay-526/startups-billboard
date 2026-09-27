@@ -7,7 +7,7 @@ import { getClientKey, rateLimit } from "@/lib/security/rate-limit";
 
 export async function POST(request: Request) {
   const clientKey = getClientKey(request);
-  const limit = rateLimit(`auth:${path.includes("login") ? "login" : "register"}:${clientKey}`, 10, 10 * 60_000);
+  const limit = rateLimit(`auth:login:${clientKey}`, 10, 10 * 60_000);
   if (!limit.allowed) return NextResponse.json({ error: "Too many attempts. Try again later." }, { status: 429, headers: { "Retry-After": String(limit.retryAfterSeconds) } });
   const parsed = loginSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Invalid email or password." }, { status: 400 });
