@@ -26,7 +26,7 @@ export async function POST(request: Request) {
   });
   if (!campaign) return NextResponse.json({ error: "Campaign not found or not editable." }, { status: 404 });
 
-  const extension = fileName.split(".").pop()?.toLowerCase() || "bin";
+  const allowedExtensions: Record<string, string> = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/avif": "avif" };\n  const extension = allowedExtensions[contentType];\n  if (!extension) return NextResponse.json({ error: "Unsupported creative type." }, { status: 400 });
   const key = `campaigns/${campaign.id}/creatives/${randomUUID()}.${extension}`;
 
   const command = new PutObjectCommand({
