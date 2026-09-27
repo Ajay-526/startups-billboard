@@ -11,7 +11,7 @@ export default function HomePage() {
 
   return (
     <>
-      <BillboardIntro />
+      <BillboardIntro billboard={hero} />
 
       <section className="site-shell pb-20" aria-labelledby="current-heading">
         <div className="mb-5 flex items-end justify-between gap-4">
