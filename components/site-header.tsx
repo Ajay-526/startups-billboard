@@ -1,1 +1,41 @@
-"use client"; import Link from "next/link"; import {ArrowUpRight,Menu,X} from "lucide-react"; import * as React from "react"; import {Button} from "@/components/ui/button"; export function SiteHeader(){const [open,setOpen]=React.useState(false);const links=[["Discover","/discover"],["Spots","/spots"],["Advertise","/advertise"]];return <header className="sticky top-0 z-50 border-b border-white/[.07] bg-[#080808]/80 backdrop-blur-xl"><div className="site-shell flex h-[72px] items-center justify-between"><Link href="/" className="group flex items-center gap-3" aria-label="The Startup Billboard home"><span className="grid size-9 place-items-center rounded-lg bg-[var(--signal)] text-[11px] font-black text-black">SB</span><span className="text-sm font-bold tracking-[-.02em]">THE STARTUP BILLBOARD</span></Link><nav className="hidden items-center gap-7 md:flex" aria-label="Primary navigation">{links.map(([label,href])=><Link key={href} className="text-sm text-white/60 hover:text-white" href={href}>{label}</Link>)}<Button asChild size="sm"><Link href="/advertise">Own a Spot <ArrowUpRight size={14}/></Link></Button></nav><button type="button" className="grid size-10 place-items-center rounded-full border border-white/10 md:hidden" aria-label={open?"Close menu":"Open menu"} aria-expanded={open} onClick={()=>setOpen(v=>!v)}>{open?<X size={18}/>:<Menu size={18}/>}</button></div>{open&&<nav className="border-t border-white/[.07] px-5 py-5 md:hidden" aria-label="Mobile navigation"><div className="site-shell flex flex-col gap-1">{links.map(([label,href])=><Link key={href} href={href} onClick={()=>setOpen(false)} className="rounded-xl px-3 py-3 text-sm text-white/75">{label}</Link>)}</div></nav>}</header>}
+"use client";
+
+import Link from "next/link";
+import { ArrowUpRight, Menu, X } from "lucide-react";
+import * as React from "react";
+import { Button } from "@/components/ui/button";
+
+export function SiteHeader() {
+  const [open, setOpen] = React.useState(false);
+  const links = [["Discover", "/discover"], ["Spots", "/spots"], ["Advertise", "/advertise"]];
+
+  return (
+    <header className="sticky top-0 z-50 border-b border-white/[.07] bg-[#080808]/80 backdrop-blur-xl">
+      <div className="site-shell flex h-[72px] items-center justify-between">
+        <Link href="/" className="group flex items-center gap-3" aria-label="The Startup Billboard home">
+          <span className="grid size-9 place-items-center rounded-lg bg-[var(--signal)] text-[11px] font-black text-black">SB</span>
+          <span className="text-sm font-bold tracking-[-.02em]">THE STARTUP BILLBOARD</span>
+        </Link>
+        <nav className="hidden items-center gap-7 md:flex" aria-label="Primary navigation">
+          {links.map(([label, href]) => <Link key={href} className="text-sm text-white/60 hover:text-white" href={href}>{label}</Link>)}
+          <Button asChild size="sm">
+            <Link href="/advertise">Own the #1 Spot <ArrowUpRight size={14} /></Link>
+          </Button>
+        </nav>
+        <button type="button" className="grid size-10 place-items-center rounded-full border border-white/10 md:hidden" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen((v) => !v)}>
+          {open ? <X size={18} /> : <Menu size={18} />}
+        </button>
+      </div>
+      {open && (
+        <nav className="border-t border-white/[.07] px-5 py-5 md:hidden" aria-label="Mobile navigation">
+          <div className="site-shell flex flex-col gap-1">
+            {links.map(([label, href]) => <Link key={href} href={href} onClick={() => setOpen(false)} className="rounded-xl px-3 py-3 text-sm text-white/75">{label}</Link>)}
+            <Button asChild className="mt-2">
+              <Link href="/advertise" onClick={() => setOpen(false)}>Own the #1 Spot <ArrowUpRight size={14} /></Link>
+            </Button>
+          </div>
+        </nav>
+      )}
+    </header>
+  );
+}
