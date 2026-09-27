@@ -35,7 +35,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <BillboardIntro billboard={hero} />
+      <BillboardIntro />
 
       {hero ? (
         <section className="site-shell pb-20" aria-labelledby="current-heading">
