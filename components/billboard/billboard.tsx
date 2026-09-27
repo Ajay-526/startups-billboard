@@ -5,12 +5,13 @@ import { ArrowUpRight, MoveUpRight } from "lucide-react";
 import { motion } from "motion/react";
 import type { CSSProperties } from "react";
 import type { Billboard } from "@/lib/data";
+import { BillboardTracker } from "@/components/analytics/billboard-tracker";
 
 const themeStyle=(b:Billboard)=>({"--brand-accent":b.accent,"--brand-surface":b.surface,"--brand-strong":b.surfaceStrong,"--brand-text":b.text,"--brand-logo-text":b.logoText} as CSSProperties);
 
 export function BillboardRankRow({ billboard }: { billboard: Billboard }) {
   return (
-    <motion.article initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }} className="group border-t border-white/[.09]" style={themeStyle(billboard)}>
+    <BillboardTracker campaignId={billboard.id} path={typeof window !== "undefined" ? window.location.pathname : undefined}><motion.article initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }} className="group border-t border-white/[.09]" style={themeStyle(billboard)}>
       <Link href={billboard.href} className="grid gap-5 py-6 sm:grid-cols-[90px_minmax(0,1fr)_auto] sm:items-center" aria-label={"Position " + billboard.position + ": " + billboard.company}>
         <div className="flex items-center justify-between sm:block"><span className="font-mono text-3xl font-black tracking-[-.06em] text-white/25 transition-colors group-hover:text-[var(--brand-accent)]">{String(billboard.position).padStart(3,"0")}</span><span className="rounded-full border px-2.5 py-1 text-[9px] font-bold uppercase tracking-[.16em] sm:hidden" style={{borderColor:"color-mix(in srgb, var(--brand-accent) 35%, transparent)",color:"var(--brand-accent)"}}>{billboard.category}</span></div>
         <div className="min-w-0"><div className="flex items-center gap-3"><span className="grid size-9 shrink-0 place-items-center rounded-lg text-[10px] font-black" style={{background:"var(--brand-strong)",color:"var(--brand-logo-text)"}}>{billboard.logo}</span><p className="text-sm font-bold">{billboard.company}</p><span className="hidden rounded-full border px-2.5 py-1 text-[9px] font-bold uppercase tracking-[.16em] sm:inline" style={{borderColor:"color-mix(in srgb, var(--brand-accent) 35%, transparent)",color:"var(--brand-accent)"}}>{billboard.category}</span></div><h3 className="mt-3 text-[clamp(1.45rem,3vw,2.7rem)] font-black leading-none tracking-[-.05em]">{billboard.headline}</h3></div>
@@ -22,7 +23,7 @@ export function BillboardRankRow({ billboard }: { billboard: Billboard }) {
 
 export function BillboardCard({ billboard }: { billboard: Billboard }) {
   return (
-    <motion.article whileHover={{ y: -6 }} transition={{ type:"spring", stiffness:320, damping:25 }} className="group" style={themeStyle(billboard)}>
+    <BillboardTracker campaignId={billboard.id} path={typeof window !== "undefined" ? window.location.pathname : undefined}><motion.article whileHover={{ y: -6 }} transition={{ type:"spring", stiffness:320, damping:25 }} className="group" style={themeStyle(billboard)}>
       <Link href={billboard.href} className="block" aria-label={billboard.company + ": " + billboard.headline}>
         <div className="billboard-frame aspect-[1.72/1] p-5 sm:p-7" style={{background:"radial-gradient(circle at 75% 20%, color-mix(in srgb, var(--brand-accent) 32%, transparent), transparent 34%), linear-gradient(135deg,var(--brand-surface),#090909)",borderColor:"color-mix(in srgb, var(--brand-accent) 45%, transparent)"}}>
           <div className="relative z-10 flex h-full flex-col justify-between"><div className="flex items-start justify-between"><span className="rounded-full border px-3 py-1.5 text-[10px] font-bold uppercase tracking-[.16em]" style={{borderColor:"color-mix(in srgb, var(--brand-accent) 35%, transparent)",color:"var(--brand-accent)"}}>{billboard.category}</span><span className="grid size-10 place-items-center rounded-xl text-xs font-black" style={{background:"var(--brand-strong)",color:"var(--brand-logo-text)"}}>{billboard.logo}</span></div><div><h3 className="max-w-[18ch] text-[clamp(1.6rem,3.4vw,3.4rem)] font-black leading-[.9] tracking-[-.055em]">{billboard.headline}</h3><p className="mt-3 max-w-[44ch] text-xs leading-5 text-white/55 sm:text-sm">{billboard.subheadline}</p></div><div className="flex items-center justify-between border-t pt-4" style={{borderColor:"color-mix(in srgb, var(--brand-accent) 20%, transparent)"}}><span className="text-xs font-semibold">{billboard.company}</span><span className="flex items-center gap-1 text-xs font-semibold" style={{color:"var(--brand-accent)"}}>{billboard.cta}<MoveUpRight size={13}/></span></div></div>
