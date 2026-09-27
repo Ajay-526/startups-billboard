@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { CreativeStatus } from "../../../../../generated/prisma/client";
+import { CreativeStatus, CampaignStatus, PaymentStatus } from "../../../../../generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth/session";
 
@@ -18,10 +18,52 @@ export async function PATCH(
     return NextResponse.json({ error: "status must be APPROVED or REJECTED." }, { status: 400 });
   }
 
-  const creative = await prisma.creative.update({
-    where: { id: creativeId },
-    data: { status: body.status },
+  const result = await prisma.$transaction(async (tx) => {
+    const creative = await tx.creative.findUnique({
+      where: { id: creativeId },
+      select: { id: true, campaignId: true, status: true },
+    });
+    if (!creative) return null;
+
+    const updatedCreative = await tx.creative.update({
+      where: { id: creativeId },
+      data: { status: body.status },
+    });
+
+    let campaignStatus: CampaignStatus | undefined;
+
+    if (body.status === CreativeStatus.APPROVED) {
+      const [pendingCreative, paidPayment, campaign] = await Promise.all([
+        tx.creative.findFirst({
+          where: { campaignId: creative.campaignId, status: CreativeStatus.PENDING },
+          select: { id: true },
+        }),
+        tx.payment.findFirst({
+          where: { campaignId: creative.campaignId, status: PaymentStatus.PAID },
+          select: { id: true },
+        }),
+        tx.campaign.findUnique({
+          where: { id: creative.campaignId },
+          select: { status: true },
+        }),
+      ]);
+
+      if (
+        !pendingCreative &&
+        paidPayment &&
+        campaign?.status === CampaignStatus.PENDING_REVIEW
+      ) {
+        await tx.campaign.update({
+          where: { id: creative.campaignId },
+          data: { status: CampaignStatus.APPROVED },
+        });
+        campaignStatus = CampaignStatus.APPROVED;
+      }
+    }
+
+    return { creative: updatedCreative, campaignStatus };
   });
 
-  return NextResponse.json({ creative });
+  if (!result) return NextResponse.json({ error: "Creative not found." }, { status: 404 });
+  return NextResponse.json(result);
 }
