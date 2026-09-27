@@ -17,10 +17,12 @@
 - [x] Architecture/decision/QA tracking
 
 ## Phase 2 — Data foundation
-- [ ] PostgreSQL
-- [ ] ORM
-- [ ] users/companies/spots/campaigns/creatives/payments/events
-- [ ] overlap protection
+- [x] PostgreSQL schema contract
+- [x] Prisma ORM foundation
+- [x] users/companies/spots/campaigns/creatives/payments/events
+- [x] availability indexes and overlap-rule foundation
+- [ ] run migration against provisioned PostgreSQL
+- [ ] repository/service queries
 
 ## Phase 3 — Advertiser experience
 - [ ] authentication
