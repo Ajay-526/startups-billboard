@@ -1,0 +1,9 @@
+export type Billboard={id:string;position:number;tier:"hero"|"prime"|"standard";company:string;logo:string;headline:string;subheadline:string;cta:string;category:string;accent:string;href:string};
+export const billboards:Billboard[]=[
+{id:"signalstack",position:1,tier:"hero",company:"SignalStack",logo:"SS",headline:"Ship signals. Not spreadsheets.",subheadline:"Real-time infrastructure for teams building intelligent products.",cta:"See SignalStack",category:"Developer Tools",accent:"#DFFF4F",href:"/company/signalstack"},
+{id:"orbitai",position:2,tier:"prime",company:"Orbit AI",logo:"O",headline:"Your next idea has a co-pilot.",subheadline:"AI workflows that turn rough thinking into production work.",cta:"Meet Orbit",category:"AI",accent:"#B7A4FF",href:"/company/orbit-ai"},
+{id:"ledgerloop",position:3,tier:"prime",company:"LedgerLoop",logo:"LL",headline:"Finance, without the finance maze.",subheadline:"Modern cash operations for ambitious teams.",cta:"Explore LedgerLoop",category:"Fintech",accent:"#72E0C1",href:"/company/ledgerloop"},
+{id:"craftcloud",position:4,tier:"prime",company:"CraftCloud",logo:"CC",headline:"Ship beautiful software faster.",subheadline:"A visual system for product teams that care about the details.",cta:"Discover CraftCloud",category:"SaaS",accent:"#FF9B6A",href:"/company/craftcloud"},
+{id:"foundry",position:5,tier:"standard",company:"Foundry",logo:"F",headline:"Build once. Learn every launch.",subheadline:"Product intelligence for modern growth teams.",cta:"Visit Foundry",category:"Growth",accent:"#9FC8FF",href:"/company/foundry"},
+{id:"arcade",position:6,tier:"standard",company:"Arcade",logo:"A",headline:"Make work feel lighter.",subheadline:"Tiny automations with a surprisingly big payoff.",cta:"Try Arcade",category:"Productivity",accent:"#FF7DC5",href:"/company/arcade"}];
+export const categories=["AI","SaaS","Fintech","Developer Tools","Consumer","Growth"];
