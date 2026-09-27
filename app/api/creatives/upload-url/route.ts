@@ -6,8 +6,11 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth/session";
 import { getS3Bucket, getS3Client } from "@/lib/storage/s3";
 import { creativeUploadSchema } from "@/lib/creatives/validation";
+import { getClientKey, rateLimit } from "@/lib/security/rate-limit";
 
 export async function POST(request: Request) {
+  const limit = rateLimit(`creative:${getClientKey(request)}`, 20, 60_000);
+  if (!limit.allowed) return NextResponse.json({ error: "Too many upload requests." }, { status: 429, headers: { "Retry-After": String(limit.retryAfterSeconds) } });
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "Authentication required." }, { status: 401 });
 
