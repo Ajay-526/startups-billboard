@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { ArrowUpRight, MoveUpRight } from "lucide-react";
 import { motion } from "motion/react";
+import type { CSSProperties } from "react";
 import type { Billboard } from "@/lib/data";
 
-const themeStyle=(b:Billboard)=>({"--brand-accent":b.accent,"--brand-surface":b.surface,"--brand-strong":b.surfaceStrong,"--brand-text":b.text,"--brand-logo-text":b.logoText} as React.CSSProperties);
+const themeStyle=(b:Billboard)=>({"--brand-accent":b.accent,"--brand-surface":b.surface,"--brand-strong":b.surfaceStrong,"--brand-text":b.text,"--brand-logo-text":b.logoText} as CSSProperties);
 
 export function BillboardRankRow({ billboard }: { billboard: Billboard }) {
   return (
