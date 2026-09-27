@@ -37,8 +37,14 @@ export async function listLiveCampaigns() {
     orderBy: { spot: { position: "asc" } },
     select: {
       ...campaignSelect,
-      spot: { select: { position: true, slug: true, tier: true } },
-      company: { select: { name: true, slug: true, logoUrl: true, accent: true } },
+      spot: { select: { position: true, slug: true, tier: true, name: true, basePrice: true } },
+      company: { select: { name: true, slug: true, logoUrl: true, accent: true, websiteUrl: true } },
+      creatives: {
+        where: { status: "APPROVED" },
+        orderBy: { createdAt: "desc" },
+        take: 1,
+        select: { assetUrl: true, altText: true },
+      },
     },
   });
 }
