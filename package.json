@@ -26,8 +26,7 @@
     "tailwind-merge": "^3.3.1",
     "@prisma/client": "^7.10.0",
     "@prisma/adapter-pg": "^7.10.0",
-    "pg": "^8.16.3",
-    "three": "^0.180.0"
+    "pg": "^8.16.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.13",
@@ -39,7 +38,6 @@
     "tailwindcss": "^4.1.13",
     "typescript": "^5.7.3",
     "prisma": "^7.10.0",
-    "dotenv": "^17.2.2",
-    "@types/three": "^0.180.0"
+    "dotenv": "^17.2.2"
   }
 }
