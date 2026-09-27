@@ -7,22 +7,13 @@ export async function GET(request: NextRequest) {
   const end = request.nextUrl.searchParams.get("end");
 
   if (!start || !end) {
-    const spots = await listActiveSpots();
-    return NextResponse.json({ spots });
+    return NextResponse.json({ spots: await listActiveSpots() });
   }
 
   const startsAt = new Date(start);
   const endsAt = new Date(end);
-
-  if (
-    Number.isNaN(startsAt.getTime()) ||
-    Number.isNaN(endsAt.getTime()) ||
-    startsAt >= endsAt
-  ) {
-    return NextResponse.json(
-      { error: "Provide valid start and end dates with end after start." },
-      { status: 400 },
-    );
+  if (Number.isNaN(startsAt.getTime()) || Number.isNaN(endsAt.getTime()) || startsAt >= endsAt) {
+    return NextResponse.json({ error: "Provide valid start and end dates with end after start." }, { status: 400 });
   }
 
   const spots = await listActiveSpots();
@@ -33,5 +24,5 @@ export async function GET(request: NextRequest) {
     })),
   );
 
-  return NextResponse.json({ spots: availability });
+  return NextResponse.json({ spots: availability, startsAt: startsAt.toISOString(), endsAt: endsAt.toISOString() });
 }
