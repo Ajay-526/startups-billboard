@@ -9,6 +9,14 @@ export type BillboardEventInput = {
 };
 
 export async function recordBillboardEvent(input: BillboardEventInput) {
+  if (input.campaignId) {
+    const campaign = await prisma.campaign.findFirst({
+      where: { id: input.campaignId, status: "LIVE" },
+      select: { id: true },
+    });
+    if (!campaign) return null;
+  }
+
   return prisma.event.create({
     data: {
       type: input.type,
@@ -21,15 +29,17 @@ export async function recordBillboardEvent(input: BillboardEventInput) {
   });
 }
 
-export async function getCampaignAnalytics(campaignId: string) {
+export async function getCampaignAnalytics(campaignId: string, userId: string) {
+  const campaign = await prisma.campaign.findFirst({
+    where: { id: campaignId, ownerId: userId },
+    select: { id: true },
+  });
+  if (!campaign) return null;
+
   const [impressions, clicks] = await Promise.all([
     prisma.event.count({ where: { campaignId, type: "IMPRESSION" } }),
     prisma.event.count({ where: { campaignId, type: "CLICK" } }),
   ]);
 
-  return {
-    impressions,
-    clicks,
-    ctr: impressions > 0 ? clicks / impressions : 0,
-  };
+  return { impressions, clicks, ctr: impressions > 0 ? clicks / impressions : 0 };
 }
