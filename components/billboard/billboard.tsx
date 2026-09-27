@@ -1,7 +1,86 @@
 "use client";
+
 import Link from "next/link";
-import {ArrowUpRight,MoveUpRight} from "lucide-react";
-import {motion} from "motion/react";
-import type {Billboard} from "@/lib/data";
-export function BillboardCard({billboard}:{billboard:Billboard}){return <motion.article whileHover={{y:-6}} transition={{type:"spring",stiffness:320,damping:25}} className="group"><Link href={billboard.href} className="block" aria-label={billboard.company+": "+billboard.headline}><div className="billboard-frame aspect-[1.72/1] p-5 sm:p-7" style={{background:"radial-gradient(circle at 75% 20%, "+billboard.accent+"44, transparent 34%), linear-gradient(135deg,#171717,#090909)"}}><div className="relative z-10 flex h-full flex-col justify-between"><div className="flex items-start justify-between"><span className="rounded-full border border-white/15 bg-black/25 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[.16em] text-white/60">{billboard.category}</span><span className="grid size-10 place-items-center rounded-xl border border-white/15 bg-white/[.06] text-xs font-black">{billboard.logo}</span></div><div><h3 className="max-w-[18ch] text-[clamp(1.6rem,3.4vw,3.4rem)] font-black leading-[.9] tracking-[-.055em]">{billboard.headline}</h3><p className="mt-3 max-w-[44ch] text-xs leading-5 text-white/55 sm:text-sm">{billboard.subheadline}</p></div><div className="flex items-center justify-between border-t border-white/10 pt-4"><span className="text-xs font-semibold">{billboard.company}</span><span className="flex items-center gap-1 text-xs font-semibold text-white/65 group-hover:text-white">{billboard.cta}<MoveUpRight size={13}/></span></div></div></div></Link></motion.article>}
-export function HeroBillboard({billboard}:{billboard:Billboard}){return <div className="billboard-frame billboard-grid min-h-[520px] p-6 sm:min-h-[620px] sm:p-10 lg:min-h-[680px] lg:p-14" style={{background:"radial-gradient(circle at 72% 24%, "+billboard.accent+"42, transparent 30%), linear-gradient(135deg,#202020 0%,#0a0a0a 62%)"}}><div className="absolute right-[-8%] top-[12%] size-[44vw] max-h-[560px] max-w-[560px] rounded-full border border-white/[.08] bg-white/[.015]"/><div className="absolute right-[9%] top-[25%] size-[24vw] max-h-[300px] max-w-[300px] rounded-full border border-white/[.1]"/><div className="relative z-10 flex h-full min-h-[468px] flex-col justify-between sm:min-h-[540px]"><div className="flex items-start justify-between gap-4"><div><p className="eyebrow text-[var(--signal)]">CURRENT #1</p><p className="mt-2 text-xs text-white/45">Live billboard · Prime attention</p></div><span className="rounded-full border border-white/10 bg-black/20 px-3 py-2 text-[10px] uppercase tracking-[.14em] text-white/55">Ends in 18 days</span></div><div className="max-w-5xl"><div className="mb-6 flex items-center gap-3"><span className="grid size-12 place-items-center rounded-2xl border border-white/15 bg-white/[.08] text-sm font-black">{billboard.logo}</span><span className="text-sm font-semibold">{billboard.company}</span></div><h1 className="max-w-[11ch] text-[clamp(3.8rem,9vw,9rem)] font-black leading-[.79] tracking-[-.075em]">{billboard.headline}</h1><p className="mt-7 max-w-[48ch] text-sm leading-6 text-white/58 sm:text-base">{billboard.subheadline}</p><Link href={billboard.href} className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[.07] px-5 py-3 text-sm font-semibold backdrop-blur hover:bg-white/[.12]">{billboard.cta}<ArrowUpRight size={15}/></Link></div><div className="flex flex-col gap-4 border-t border-white/10 pt-5 sm:flex-row sm:items-end sm:justify-between"><p className="max-w-md text-xs leading-5 text-white/42">The #1 position is scarce by design. One active owner. One campaign window. One very visible spot.</p><span className="eyebrow text-white/35">THE BILLBOARD / 001</span></div></div></div>}
+import { ArrowUpRight, MoveUpRight } from "lucide-react";
+import { motion } from "motion/react";
+import type { Billboard } from "@/lib/data";
+
+export function BillboardRankRow({ billboard }: { billboard: Billboard }) {
+  return (
+    <motion.article initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.45 }} className="group border-t border-white/[.09]">
+      <Link href={billboard.href} className="grid gap-5 py-6 sm:grid-cols-[90px_minmax(0,1fr)_auto] sm:items-center" aria-label={"Position " + billboard.position + ": " + billboard.company}>
+        <div className="flex items-center justify-between sm:block">
+          <span className="font-mono text-3xl font-black tracking-[-.06em] text-white/25 transition-colors group-hover:text-[var(--signal)]">
+            {String(billboard.position).padStart(3, "0")}
+          </span>
+          <span className="rounded-full border border-white/10 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[.16em] text-white/35 sm:hidden">{billboard.category}</span>
+        </div>
+        <div className="min-w-0">
+          <div className="flex items-center gap-3">
+            <span className="grid size-9 shrink-0 place-items-center rounded-lg border border-white/10 bg-white/[.05] text-[10px] font-black">{billboard.logo}</span>
+            <p className="text-sm font-bold">{billboard.company}</p>
+            <span className="hidden rounded-full border border-white/10 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[.16em] text-white/35 sm:inline">{billboard.category}</span>
+          </div>
+          <h3 className="mt-3 text-[clamp(1.45rem,3vw,2.7rem)] font-black leading-none tracking-[-.05em]">{billboard.headline}</h3>
+        </div>
+        <div className="flex items-center justify-between gap-5 sm:justify-end">
+          <p className="max-w-sm text-xs leading-5 text-white/40 sm:text-right">{billboard.subheadline}</p>
+          <ArrowUpRight size={18} className="shrink-0 text-white/30 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-[var(--signal)]" />
+        </div>
+      </Link>
+    </motion.article>
+  );
+}
+
+export function BillboardCard({ billboard }: { billboard: Billboard }) {
+  return (
+    <motion.article whileHover={{ y: -6 }} transition={{ type: "spring", stiffness: 320, damping: 25 }} className="group">
+      <Link href={billboard.href} className="block" aria-label={billboard.company + ": " + billboard.headline}>
+        <div className="billboard-frame aspect-[1.72/1] p-5 sm:p-7" style={{ background: "radial-gradient(circle at 75% 20%, " + billboard.accent + "44, transparent 34%), linear-gradient(135deg,#171717,#090909)" }}>
+          <div className="relative z-10 flex h-full flex-col justify-between">
+            <div className="flex items-start justify-between">
+              <span className="rounded-full border border-white/15 bg-black/25 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[.16em] text-white/60">{billboard.category}</span>
+              <span className="grid size-10 place-items-center rounded-xl border border-white/15 bg-white/[.06] text-xs font-black">{billboard.logo}</span>
+            </div>
+            <div>
+              <h3 className="max-w-[18ch] text-[clamp(1.6rem,3.4vw,3.4rem)] font-black leading-[.9] tracking-[-.055em]">{billboard.headline}</h3>
+              <p className="mt-3 max-w-[44ch] text-xs leading-5 text-white/55 sm:text-sm">{billboard.subheadline}</p>
+            </div>
+            <div className="flex items-center justify-between border-t border-white/10 pt-4">
+              <span className="text-xs font-semibold">{billboard.company}</span>
+              <span className="flex items-center gap-1 text-xs font-semibold text-white/65 group-hover:text-white">{billboard.cta}<MoveUpRight size={13}/></span>
+            </div>
+          </div>
+        </div>
+      </Link>
+    </motion.article>
+  );
+}
+
+export function HeroBillboard({ billboard }: { billboard: Billboard }) {
+  return (
+    <div className="billboard-frame billboard-grid min-h-[520px] p-6 sm:min-h-[620px] sm:p-10 lg:min-h-[680px] lg:p-14" style={{ background: "radial-gradient(circle at 72% 24%, " + billboard.accent + "42, transparent 30%), linear-gradient(135deg,#202020 0%,#0a0a0a 62%)" }}>
+      <div className="absolute right-[-8%] top-[12%] size-[44vw] max-h-[560px] max-w-[560px] rounded-full border border-white/[.08] bg-white/[.015]" />
+      <div className="absolute right-[9%] top-[25%] size-[24vw] max-h-[300px] max-w-[300px] rounded-full border border-white/[.1]" />
+      <div className="relative z-10 flex h-full min-h-[468px] flex-col justify-between sm:min-h-[540px]">
+        <div className="flex items-start justify-between gap-4">
+          <div><p className="eyebrow text-[var(--signal)]">CURRENT #1</p><p className="mt-2 text-xs text-white/45">Live billboard · Prime attention</p></div>
+          <span className="rounded-full border border-white/10 bg-black/20 px-3 py-2 text-[10px] uppercase tracking-[.14em] text-white/55">Ends in 18 days</span>
+        </div>
+        <div className="max-w-5xl">
+          <div className="mb-6 flex items-center gap-3">
+            <span className="grid size-12 place-items-center rounded-2xl border border-white/15 bg-white/[.08] text-sm font-black">{billboard.logo}</span>
+            <span className="text-sm font-semibold">{billboard.company}</span>
+          </div>
+          <h1 className="max-w-[11ch] text-[clamp(3.8rem,9vw,9rem)] font-black leading-[.79] tracking-[-.075em]">{billboard.headline}</h1>
+          <p className="mt-7 max-w-[48ch] text-sm leading-6 text-white/58 sm:text-base">{billboard.subheadline}</p>
+          <Link href={billboard.href} className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[.07] px-5 py-3 text-sm font-semibold backdrop-blur hover:bg-white/[.12]">See {billboard.company}<ArrowUpRight size={15}/></Link>
+        </div>
+        <div className="flex flex-col gap-4 border-t border-white/10 pt-5 sm:flex-row sm:items-end sm:justify-between">
+          <p className="max-w-md text-xs leading-5 text-white/42">The #1 position is scarce by design. One active owner. One campaign window. One very visible spot.</p>
+          <span className="eyebrow text-white/35">THE BILLBOARD / 001</span>
+        </div>
+      </div>
+    </div>
+  );
+}
