@@ -39,6 +39,29 @@ export async function createRazorpayOrder(input: {
   return response.json() as Promise<{ id: string; amount: number; currency: string; status: string }>;
 }
 
+export async function fetchRazorpayPayment(paymentId: string) {
+  const { keyId, keySecret } = credentials();
+  const response = await fetch(`${apiBase}/payments/${encodeURIComponent(paymentId)}`, {
+    headers: {
+      Authorization: `Basic ${Buffer.from(`${keyId}:${keySecret}`).toString("base64")}`,
+    },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    const detail = await response.text();
+    throw new Error(`Razorpay payment lookup failed: ${response.status} ${detail}`);
+  }
+
+  return response.json() as Promise<{
+    id: string;
+    order_id: string;
+    amount: number;
+    currency: string;
+    status: string;
+  }>;
+}
+
 export function verifyRazorpayPaymentSignature(input: {
   orderId: string;
   paymentId: string;
