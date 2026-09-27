@@ -134,6 +134,15 @@ model Payment {
   @@index([campaignId, status])
 }
 
+model WebhookEvent {
+  id String @id @default(cuid())
+  provider String
+  eventId String @unique
+  payload Json
+  receivedAt DateTime @default(now())
+  @@index([provider, receivedAt])
+}
+
 model Event {
   id String @id @default(cuid())
   type String
