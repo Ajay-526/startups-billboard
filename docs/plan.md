@@ -48,14 +48,14 @@
 - [ ] reports
 
 ## Phase 6 — Analytics + growth
-- [ ] server-side events
-- [ ] advertiser dashboard
+- [x] server-side events
+- [x] advertiser dashboard
 - [ ] Bklit charts
 - [ ] attribution/funnel
 
 ## Phase 7 — Production hardening
 - [ ] E2E tests
 - [ ] performance/load testing
-- [ ] security review
+- [x] security foundation review
 - [ ] SEO/broken-link scan
 - [ ] observability
