@@ -3,28 +3,67 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { BillboardRankRow, HeroBillboard } from "@/components/billboard/billboard";
 import { BillboardIntro } from "@/components/billboard/hero";
 import { Button } from "@/components/ui/button";
-import { billboards } from "@/lib/data";
+import { listLiveCampaigns } from "@/lib/campaigns/repository";
+import type { Billboard } from "@/lib/data";
 
-export default function HomePage() {
+function toBillboard(campaign: Awaited<ReturnType<typeof listLiveCampaigns>>[number]): Billboard {
+  const accent = campaign.company.accent ?? "#DFFF4F";
+  return {
+    id: campaign.id,
+    position: campaign.spot.position,
+    tier: campaign.spot.tier.toLowerCase() as Billboard["tier"],
+    company: campaign.company.name,
+    logo: campaign.company.name.slice(0, 2).toUpperCase(),
+    headline: campaign.headline,
+    subheadline: campaign.subheadline ?? campaign.company.name,
+    cta: "See company",
+    price: Number(campaign.totalAmount),
+    category: campaign.spot.name,
+    accent,
+    surface: "#11150A",
+    surfaceStrong: accent,
+    text: "#F4F1E8",
+    logoText: "#080808",
+    href: campaign.company.websiteUrl ?? "/advertise",
+  };
+}
+
+export default async function HomePage() {
+  const liveCampaigns = await listLiveCampaigns();
+  const billboards = liveCampaigns.map(toBillboard);
   const hero = billboards[0];
-  const ranked = billboards.slice(1);
 
   return (
     <>
       <BillboardIntro billboard={hero} />
 
-      <section className="site-shell pb-20" aria-labelledby="current-heading">
-        <div className="mb-5 flex items-end justify-between gap-4">
-          <div>
-            <p className="eyebrow text-[var(--signal)]">THE LIVE BOARD</p>
-            <h2 id="current-heading" className="mt-2 text-xl font-bold tracking-tight">
-              Position #1 belongs to {hero.company}.
-            </h2>
+      {hero ? (
+        <section className="site-shell pb-20" aria-labelledby="current-heading">
+          <div className="mb-5 flex items-end justify-between gap-4">
+            <div>
+              <p className="eyebrow text-[var(--signal)]">THE LIVE BOARD</p>
+              <h2 id="current-heading" className="mt-2 text-xl font-bold tracking-tight">
+                Position #1 belongs to {hero.company}.
+              </h2>
+            </div>
+            <span className="hidden text-xs text-white/30 sm:block">POSITION 001 / ACTIVE</span>
           </div>
-          <span className="hidden text-xs text-white/30 sm:block">POSITION 001 / ACTIVE</span>
-        </div>
-        <HeroBillboard billboard={hero} />
-      </section>
+          <HeroBillboard billboard={hero} />
+        </section>
+      ) : (
+        <section className="site-shell pb-20">
+          <div className="rounded-[30px] border border-white/10 bg-white/[.025] p-8">
+            <p className="eyebrow text-[var(--signal)]">THE BILLBOARD</p>
+            <h2 className="mt-3 text-3xl font-black tracking-tight">The #1 spot is available.</h2>
+            <p className="mt-4 max-w-xl text-sm leading-6 text-white/45">
+              Launch a campaign and become the next company on the live board.
+            </p>
+            <Button asChild className="mt-6">
+              <Link href="/advertise">Own the #1 Spot <ArrowRight size={16} /></Link>
+            </Button>
+          </div>
+        </section>
+      )}
 
       <section id="board" className="border-y border-white/[.07] py-20">
         <div className="site-shell">
@@ -34,35 +73,18 @@ export default function HomePage() {
               <h2 className="display-sm mt-3 max-w-4xl">WHO&apos;S ON THE WALL.</h2>
             </div>
             <p className="max-w-sm text-xs leading-5 text-white/40">
-              Every company gets a position. The closer to #1, the harder the spot is to miss.
+              Live inventory is driven by approved campaigns and their scheduled windows.
             </p>
           </div>
           <div>
-            {ranked.map((billboard) => (
+            {billboards.slice(1).map((billboard) => (
               <BillboardRankRow key={billboard.id} billboard={billboard} />
             ))}
           </div>
         </div>
       </section>
 
-      <section className="site-shell py-20">
-        <div className="rounded-[30px] border border-white/10 bg-white/[.025] p-6 sm:p-10">
-          <p className="eyebrow text-white/35">DISCOVERY</p>
-          <h2 className="display-sm mt-4 max-w-4xl">Find the companies behind the signs.</h2>
-          <p className="mt-5 max-w-2xl text-sm leading-6 text-white/45">
-            Browse the board by category, discover what&apos;s being built, and follow the companies you want to know.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-2">
-            {["AI", "SaaS", "Fintech", "Developer Tools", "Growth"].map((c) => (
-              <Link key={c} href={"/category/" + c.toLowerCase().replaceAll(" ", "-")} className="rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs text-white/55 transition-colors hover:border-white/20 hover:text-white">
-                {c}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="own-a-spot" className="site-shell pb-24 pt-4">
+      <section id="own-a-spot" className="site-shell pb-24 pt-20">
         <div className="relative overflow-hidden rounded-[34px] border border-[var(--signal)]/20 bg-[var(--signal)] p-7 text-black sm:p-12 lg:p-16">
           <div className="relative z-10 max-w-4xl">
             <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[.18em]">
