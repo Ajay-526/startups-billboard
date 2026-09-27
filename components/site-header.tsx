@@ -18,8 +18,8 @@ export function SiteHeader() {
         </Link>
         <nav className="hidden items-center gap-7 md:flex" aria-label="Primary navigation">
           {links.map(([label, href]) => <Link key={href} className="text-sm text-white/60 hover:text-white" href={href}>{label}</Link>)}
-          <Button asChild size="sm">
-            <Link href="/advertise">Own the #1 Spot <ArrowUpRight size={14} /></Link>
+          <Button asChild size="sm" className="bg-[var(--signal)] text-black hover:bg-[#f2ff8a]">
+            <Link href="/advertise" className="text-black">Own the #1 Spot <ArrowUpRight size={14} /></Link>
           </Button>
         </nav>
         <button type="button" className="grid size-10 place-items-center rounded-full border border-white/10 md:hidden" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen((v) => !v)}>
@@ -30,8 +30,8 @@ export function SiteHeader() {
         <nav className="border-t border-white/[.07] px-5 py-5 md:hidden" aria-label="Mobile navigation">
           <div className="site-shell flex flex-col gap-1">
             {links.map(([label, href]) => <Link key={href} href={href} onClick={() => setOpen(false)} className="rounded-xl px-3 py-3 text-sm text-white/75">{label}</Link>)}
-            <Button asChild className="mt-2">
-              <Link href="/advertise" onClick={() => setOpen(false)}>Own the #1 Spot <ArrowUpRight size={14} /></Link>
+            <Button asChild className="mt-2 bg-[var(--signal)] text-black hover:bg-[#f2ff8a]">
+              <Link href="/advertise" onClick={() => setOpen(false)} className="text-black">Own the #1 Spot <ArrowUpRight size={14} /></Link>
             </Button>
           </div>
         </nav>
