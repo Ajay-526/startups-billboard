@@ -1,1 +1,43 @@
-{"name":"startups-billboard","version":"0.1.0","private":true,"scripts":{"dev":"next dev","build":"next build","start":"next start","lint":"eslint .","typecheck":"tsc --noEmit"},"dependencies":{"@radix-ui/react-slot":"^1.2.3","animejs":"^4.2.2","class-variance-authority":"^0.7.1","clsx":"^2.1.1","lucide-react":"^0.468.0","motion":"^12.23.24","next":"^15.5.4","react":"^19.1.1","react-dom":"^19.1.1","tailwind-merge":"^3.3.1"},"devDependencies":{"@tailwindcss/postcss":"^4.1.13","@types/node":"^22.10.6","@types/react":"^19.0.3","@types/react-dom":"^19.0.2","eslint":"^9.17.0","eslint-config-next":"^15.5.4","tailwindcss":"^4.1.13","typescript":"^5.7.3"}}
+{
+  "name": "startups-billboard",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "postinstall": "prisma generate",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.2.3",
+    "animejs": "^4.2.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.468.0",
+    "motion": "^12.23.24",
+    "next": "^15.5.4",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "tailwind-merge": "^3.3.1",
+    "@prisma/client": "^7.10.0",
+    "@prisma/adapter-pg": "^7.10.0",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.13",
+    "@types/node": "^22.10.6",
+    "@types/react": "^19.0.3",
+    "@types/react-dom": "^19.0.2",
+    "eslint": "^9.17.0",
+    "eslint-config-next": "^15.5.4",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.7.3",
+    "prisma": "^7.10.0",
+    "dotenv": "^17.2.2"
+  }
+}
