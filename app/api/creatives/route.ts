@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth/session";
 import { creativeUploadSchema } from "@/lib/creatives/validation";
+import { getClientKey, rateLimit } from "@/lib/security/rate-limit";
 import { getS3Bucket, getS3Client } from "@/lib/storage/s3";
 
 const MAX_OBJECT_BYTES = 10 * 1024 * 1024;
@@ -49,6 +50,8 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const limit = rateLimit(`creative:${getClientKey(request)}`, 20, 60_000);
+  if (!limit.allowed) return NextResponse.json({ error: "Too many upload requests." }, { status: 429, headers: { "Retry-After": String(limit.retryAfterSeconds) } });
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "Authentication required." }, { status: 401 });
 
