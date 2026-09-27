@@ -25,17 +25,18 @@
 - [x] repository/service queries
 
 ## Phase 3 — Advertiser experience
-- [ ] authentication
-- [ ] company registration
-- [ ] spot selection
-- [ ] campaign dates
+- [x] authentication foundation
+- [x] company registration API
+- [x] spot selection/availability API
+- [x] campaign dates + server-side pricing
 - [ ] creative upload
 - [ ] exact preview
 
 ## Phase 4 — Payments + activation
-- [ ] provider adapter
-- [ ] signed webhooks
-- [ ] idempotency
+- [x] Razorpay provider adapter
+- [x] signed webhooks
+- [x] webhook idempotency foundation
+- [ ] payment verification callback
 - [ ] approval
 - [ ] scheduling
 - [ ] expiry
