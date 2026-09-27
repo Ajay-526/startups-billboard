@@ -22,7 +22,7 @@
 - [x] users/companies/spots/campaigns/creatives/payments/events
 - [x] availability indexes and overlap-rule foundation
 - [ ] run migration against provisioned PostgreSQL
-- [ ] repository/service queries
+- [x] repository/service queries
 
 ## Phase 3 — Advertiser experience
 - [ ] authentication
