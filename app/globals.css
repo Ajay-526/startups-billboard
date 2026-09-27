@@ -54,14 +54,14 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 
 .display {
-  font-size: clamp(4rem, 12vw, 10.5rem);
+  font-size: clamp(3.2rem, 8vw, 7.5rem);
   line-height: .78;
   letter-spacing: -.075em;
   font-weight: 800;
 }
 
 .display-sm {
-  font-size: clamp(2.7rem, 7vw, 6.5rem);
+  font-size: clamp(2.25rem, 5.2vw, 5rem);
   line-height: .84;
   letter-spacing: -.065em;
   font-weight: 800;
@@ -134,6 +134,6 @@ button, a { -webkit-tap-highlight-color: transparent; }
   }
 
   .display {
-    font-size: clamp(3.8rem, 19vw, 7rem);
+    font-size: clamp(3.25rem, 16vw, 6rem);
   }
 }
