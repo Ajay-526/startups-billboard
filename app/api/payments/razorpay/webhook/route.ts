@@ -67,10 +67,10 @@ export async function POST(request: Request) {
       }
     });
   } catch (error) {
-    if (String(error).includes("Unique constraint")) {
+    if (typeof error === "object" && error !== null && "code" in error && (error as { code?: string }).code === "P2002") {
       return NextResponse.json({ received: true, duplicate: true });
     }
-    throw error;
+    return NextResponse.json({ error: "Webhook processing failed." }, { status: 500 });
   }
 
   return NextResponse.json({ received: true });
