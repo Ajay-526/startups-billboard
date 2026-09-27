@@ -1,7 +1,9 @@
+import { HeadObjectCommand } from "@aws-sdk/client-s3";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth/session";
 import { creativeUploadSchema } from "@/lib/creatives/validation";
+import { getS3Bucket, getS3Client } from "@/lib/storage/s3";
 
 export async function GET(request: Request) {
   const user = await getCurrentUser();
@@ -53,7 +55,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid creative storage key." }, { status: 400 });
   }
 
-  const assetUrl = body.assetUrl?.trim() || body.key;
+  try {
+    await getS3Client().send(new HeadObjectCommand({
+      Bucket: getS3Bucket(),
+      Key: body.key,
+    }));
+  } catch {
+    return NextResponse.json({ error: "Uploaded creative was not found in storage." }, { status: 409 });
+  }
+
+  const publicBase = process.env.S3_PUBLIC_URL?.replace(/\\/$/, "");
+  const assetUrl = body.assetUrl?.trim() || (publicBase ? `${publicBase}/${body.key}` : body.key);
   const creative = await prisma.creative.create({
     data: {
       campaignId: campaign.id,
