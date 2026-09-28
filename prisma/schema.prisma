@@ -55,6 +55,7 @@ model User {
   companies CompanyUser[]
   campaigns Campaign[] @relation("CampaignOwner")
   events Event[]
+  products Product[] @relation("ProductOwner")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   sessions Session[]
@@ -189,3 +190,102 @@ model Event {
   @@index([campaignId, occurredAt])
   @@index([userId, occurredAt])
 }
+
+
+enum BoardType {
+  ALL_TIME
+  TODAY
+  DAILY
+}
+
+model Product {
+  id String @id @default(cuid())
+  slug String @unique
+  title String
+  url String
+  xHandle String?
+  description String?
+  categoryId String
+  ownerId String?
+  totalSpend Decimal @default(0) @db.Decimal(12, 2)
+  firstClaimedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  category Category @relation(fields: [categoryId], references: [id])
+  owner User? @relation("ProductOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  contributions BidContribution[]
+  dailySpend DailySpend[]
+  activities Activity[]
+  clicks ProductClick[]
+
+  @@index([categoryId, totalSpend])
+  @@index([totalSpend, firstClaimedAt])
+  @@index([ownerId])
+}
+
+model Category {
+  id String @id @default(cuid())
+  name String
+  slug String @unique
+  createdAt DateTime @default(now())
+
+  products Product[]
+
+  @@index([name])
+}
+
+model BidContribution {
+  id String @id @default(cuid())
+  productId String
+  amount Decimal @db.Decimal(12, 2)
+  currency String @default("USD")
+  provider String?
+  providerPaymentId String? @unique
+  createdAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, createdAt])
+  @@index([createdAt])
+}
+
+model DailySpend {
+  id String @id @default(cuid())
+  productId String
+  day DateTime
+  amount Decimal @default(0) @db.Decimal(12, 2)
+  firstContributionAt DateTime
+  updatedAt DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, day])
+  @@index([day, amount])
+}
+
+model Activity {
+  id String @id @default(cuid())
+  productId String
+  type String
+  amount Decimal? @db.Decimal(12, 2)
+  rank Int?
+  createdAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+  @@index([productId, createdAt])
+}
+
+model ProductClick {
+  id String @id @default(cuid())
+  productId String
+  path String?
+  createdAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, createdAt])
+}
+
