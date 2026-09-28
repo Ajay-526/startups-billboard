@@ -1,4 +1,4 @@
-import { PrismaClient, SpotTier } from "../generated/prisma/client";
+import { PrismaClient } from "../generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 const connectionString = process.env.DATABASE_URL;
@@ -6,30 +6,102 @@ if (!connectionString) throw new Error("DATABASE_URL is required.");
 
 const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString }) });
 
-const spots = [
-  { position: 1, slug: "top-spot", tier: SpotTier.HERO, name: "The #1 Spot", description: "The dominant billboard position.", basePrice: "25000.00" },
-  { position: 2, slug: "prime-02", tier: SpotTier.PRIME, name: "Prime Spot 02", description: "High-visibility ranked position.", basePrice: "12000.00" },
-  { position: 3, slug: "prime-03", tier: SpotTier.PRIME, name: "Prime Spot 03", description: "High-visibility ranked position.", basePrice: "9000.00" },
-  { position: 4, slug: "prime-04", tier: SpotTier.PRIME, name: "Prime Spot 04", description: "High-visibility ranked position.", basePrice: "7000.00" },
-  { position: 5, slug: "standard-05", tier: SpotTier.STANDARD, name: "Standard Spot 05", description: "Ranked billboard position.", basePrice: "5000.00" },
-  { position: 6, slug: "standard-06", tier: SpotTier.STANDARD, name: "Standard Spot 06", description: "Ranked billboard position.", basePrice: "3500.00" },
+const categories = [
+  ["AI", "ai"],
+  ["SaaS", "saas"],
+  ["Developer", "developer"],
+  ["Marketing", "marketing"],
+  ["Productivity", "productivity"],
+  ["Fintech", "fintech"],
+  ["Ecommerce", "ecommerce"],
+  ["Health", "health"],
+  ["Business", "business"],
+  ["Other", "other"],
+];
+
+const products = [
+  {
+    slug: "startup-billboard-demo",
+    title: "Startup Billboard",
+    url: "https://example.com",
+    description: "A demo listing for local development.",
+    category: "saas",
+    amount: "100.00",
+  },
+  {
+    slug: "launchpad-demo",
+    title: "Launchpad",
+    url: "https://example.com/launchpad",
+    description: "A second demo listing.",
+    category: "ai",
+    amount: "50.00",
+  },
+  {
+    slug: "maker-tools-demo",
+    title: "Maker Tools",
+    url: "https://example.com/maker-tools",
+    description: "A developer tools demo listing.",
+    category: "developer",
+    amount: "25.00",
+  },
 ];
 
 async function main() {
-  for (const spot of spots) {
-    await prisma.spot.upsert({
-      where: { position: spot.position },
-      update: {
-        slug: spot.slug,
-        tier: spot.tier,
-        name: spot.name,
-        description: spot.description,
-        basePrice: spot.basePrice,
-      },
-      create: spot,
+  for (const [name, slug] of categories) {
+    await prisma.category.upsert({
+      where: { slug },
+      update: { name },
+      create: { name, slug },
     });
   }
-  console.log(`Seeded ${spots.length} billboard spots.`);
+
+  for (const product of products) {
+    const category = await prisma.category.findUniqueOrThrow({
+      where: { slug: product.category },
+      select: { id: true },
+    });
+
+    const existing = await prisma.product.findUnique({
+      where: { slug: product.slug },
+      select: { id: true },
+    });
+
+    if (!existing) {
+      const created = await prisma.product.create({
+        data: {
+          slug: product.slug,
+          title: product.title,
+          url: product.url,
+          description: product.description,
+          categoryId: category.id,
+          totalSpend: product.amount,
+        },
+      });
+
+      const amount = product.amount;
+      const day = new Date();
+      day.setUTCHours(0, 0, 0, 0);
+
+      await prisma.bidContribution.create({
+        data: {
+          productId: created.id,
+          amount,
+          provider: "seed",
+        },
+      });
+
+      await prisma.dailySpend.create({
+        data: {
+          productId: created.id,
+          day,
+          amount,
+          firstContributionAt: created.createdAt,
+        },
+      });
+    }
+  }
+
+  console.log(`Seeded ${categories.length} categories and ${products.length} demo products.`);
 }
 
 main()
