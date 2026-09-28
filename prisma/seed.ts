@@ -1,10 +1,15 @@
 import { PrismaClient } from "../generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
-const connectionString = process.env.DATABASE_URL;
+const connectionString =
+  process.env.DATABASE_URL ||
+  "postgresql://postgres:mysecretpassword@localhost:5432/postgres";
+
 if (!connectionString) throw new Error("DATABASE_URL is required.");
 
-const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString }) });
+const prisma = new PrismaClient({
+  adapter: new PrismaPg({ connectionString }),
+});
 
 const categories = [
   ["AI", "ai"],
@@ -101,7 +106,9 @@ async function main() {
     }
   }
 
-  console.log(`Seeded ${categories.length} categories and ${products.length} demo products.`);
+  console.log(
+    `Seeded ${categories.length} categories and ${products.length} demo products.`,
+  );
 }
 
 main()
