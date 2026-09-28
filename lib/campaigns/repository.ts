@@ -31,6 +31,14 @@ export async function listCompanyCampaigns(companyId: string) {
   });
 }
 
+export async function listLiveCampaignsSafe() {
+  try {
+    return await listLiveCampaigns();
+  } catch {
+    return [];
+  }
+}
+
 export async function listLiveCampaigns() {
   return prisma.campaign.findMany({
     where: { status: CampaignStatus.LIVE },

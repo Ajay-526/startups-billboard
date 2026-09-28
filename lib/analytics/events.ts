@@ -1,3 +1,4 @@
+import { Prisma } from "../../generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 
 export type BillboardEventInput = {
@@ -23,7 +24,7 @@ export async function recordBillboardEvent(input: BillboardEventInput) {
       campaignId: input.campaignId,
       userId: input.userId,
       path: input.path,
-      properties: input.properties,
+      properties: input.properties as Prisma.InputJsonValue | undefined,
     },
     select: { id: true, type: true, occurredAt: true },
   });
