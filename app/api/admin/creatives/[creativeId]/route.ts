@@ -14,7 +14,8 @@ export async function PATCH(
 
   const { creativeId } = await params;
   const body = await request.json().catch(() => null) as { status?: string } | null;
-  if (body?.status !== CreativeStatus.APPROVED && body?.status !== CreativeStatus.REJECTED) {
+  const nextStatus = body?.status;
+  if (nextStatus !== CreativeStatus.APPROVED && nextStatus !== CreativeStatus.REJECTED) {
     return NextResponse.json({ error: "status must be APPROVED or REJECTED." }, { status: 400 });
   }
 
@@ -27,12 +28,12 @@ export async function PATCH(
 
     const updatedCreative = await tx.creative.update({
       where: { id: creativeId },
-      data: { status: body.status },
+      data: { status: nextStatus },
     });
 
     let campaignStatus: CampaignStatus | undefined;
 
-    if (body.status === CreativeStatus.APPROVED) {
+    if (nextStatus === CreativeStatus.APPROVED) {
       const [pendingCreative, paidPayment, campaign] = await Promise.all([
         tx.creative.findFirst({
           where: { campaignId: creative.campaignId, status: CreativeStatus.PENDING },

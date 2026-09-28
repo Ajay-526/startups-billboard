@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 export function SiteHeader() {
   const [open, setOpen] = React.useState(false);
-  const links = [["Discover", "/discover"], ["Spots", "/spots"], ["Advertise", "/advertise"]];
+  const links = [["Discover", "/discover"], ["Spots", "/spots"], ["Advertise", "/advertise"], ["Dashboard", "/dashboard"]];
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/[.07] bg-[#080808]/80 backdrop-blur-xl">
