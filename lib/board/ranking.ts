@@ -1,4 +1,4 @@
-import { Prisma } from "@/../generated/prisma/client";
+import { Prisma } from "../../generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 
 const MINIMUM_SPEND = new Prisma.Decimal(10);
