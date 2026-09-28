@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const campaignInputSchema = z.object({
+export const campaignFieldsSchema = z.object({
   companyId: z.string().min(1),
   ownerId: z.string().min(1),
   spotId: z.string().min(1),
@@ -9,7 +9,9 @@ export const campaignInputSchema = z.object({
   startsAt: z.coerce.date(),
   endsAt: z.coerce.date(),
   totalAmount: z.coerce.number().positive(),
-}).superRefine((value, ctx) => {
+});
+
+export const campaignInputSchema = campaignFieldsSchema.superRefine((value, ctx) => {
   if (value.startsAt >= value.endsAt) {
     ctx.addIssue({
       code: "custom",

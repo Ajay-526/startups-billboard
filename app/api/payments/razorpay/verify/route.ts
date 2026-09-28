@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { Prisma } from "../../../../generated/prisma/client";
+import { Prisma } from "../../../../../generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth/session";
 import { fetchRazorpayPayment, verifyRazorpayPaymentSignature } from "@/lib/payments/razorpay";

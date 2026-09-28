@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
-import { Prisma } from "../../../generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth/session";
 import { reserveSpot } from "@/lib/billboard/availability";
 import { calculateCampaignAmount } from "@/lib/campaigns/pricing";
-import { campaignInputSchema } from "@/lib/campaigns/validation";
+import { campaignFieldsSchema } from "@/lib/campaigns/validation";
 
 export async function GET() {
   const user = await getCurrentUser();
@@ -29,7 +28,7 @@ export async function POST(request: Request) {
   if (!user) return NextResponse.json({ error: "Authentication required." }, { status: 401 });
 
   const body = await request.json().catch(() => null);
-  const parsed = campaignInputSchema.omit({ ownerId: true, totalAmount: true }).safeParse(body);
+  const parsed = campaignFieldsSchema.omit({ ownerId: true, totalAmount: true }).safeParse(body);
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid campaign details.", details: parsed.error.flatten() }, { status: 400 });
   }

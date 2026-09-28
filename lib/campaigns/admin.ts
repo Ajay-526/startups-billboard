@@ -27,7 +27,7 @@ export async function updateCampaignStatus(id: string, status: CampaignStatus) {
     });
     if (!campaign) return null;
 
-    if (status === CampaignStatus.CANCELLED && [CampaignStatus.LIVE, CampaignStatus.COMPLETED].includes(campaign.status)) {
+    if (status === CampaignStatus.CANCELLED && (campaign.status === CampaignStatus.LIVE || campaign.status === CampaignStatus.COMPLETED)) {
       throw new Error("Live or completed campaigns cannot be cancelled.");
     }
 

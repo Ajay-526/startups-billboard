@@ -33,6 +33,7 @@ export async function getCurrentUser() {
   const store = await cookies();
   const token = store.get(COOKIE_NAME)?.value;
   if (!token) return null;
+  if (!process.env.DATABASE_URL) return null;
 
   const session = await prisma.session.findUnique({
     where: { tokenHash: hashToken(token) },

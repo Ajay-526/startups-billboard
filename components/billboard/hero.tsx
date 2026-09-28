@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
-import { animate } from "animejs";
+import { animate, stagger } from "animejs";
 import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 
@@ -14,7 +14,7 @@ export function BillboardIntro() {
     animate(".intro-letter", {
       opacity: [0, 1],
       translateY: [30, 0],
-      delay: (_el, i) => i * 28,
+      delay: stagger(28),
       duration: 850,
       ease: "out(4)",
     });
